@@ -22,7 +22,4 @@ stages:
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       application: ${CF_APP}
-    script: |-
-      #!/bin/bash
-      cf create-service ibm-blockchain-5-prod ibm-blockchain-plan-5-prod BlockchainExampleServiceHfc
-      cf push "${CF_APP}"
+
