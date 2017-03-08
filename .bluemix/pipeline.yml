@@ -22,4 +22,26 @@ stages:
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       application: ${CF_APP}
-
+    script: |-
+      #!/bin/bash
+blockchainService='BlockchainExampleServiceHfc'
+appNames=`cf apps`
+regex='BlockchainExampleHfc*'
+routeName='mybluemix.net$'
+appToUnbind=''
+for app in $appNames;
+do
+	if [[ $app =~ $routeName ]]
+	then
+		continue
+	fi
+	if [[ $app =~ $regex ]]
+	then
+		appToUnbind=$app
+		echo $appToUnbind
+	fi
+done
+cf us $appToUnbind $blockchainService
+cf delete-service $blockchainService -f
+cf create-service ibm-blockchain-5-prod ibm-blockchain-plan-5-prod $blockchainService
+cf push "${CF_APP}"
